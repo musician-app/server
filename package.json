@@ -18,7 +18,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "swagger:generate": "openapi --input ./dist/swagger.json --output ./generated --name AppClient"
+    "ci": "yarn ci:swagger && yarn ci:generate",
+    "ci:generate": "openapi --input ./dist/swagger.json --output ./generated --name AppClient",
+    "ci:swagger": "set CI=true && node dist/main.js"
   },
   "dependencies": {
     "@fastify/cookie": "^8.3.0",

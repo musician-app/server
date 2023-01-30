@@ -23,7 +23,8 @@ async function bootstrap() {
 
      const document = SwaggerModule.createDocument(app, documentConfig);
 
-     await writeFile("./dist/swagger.json", JSON.stringify(document));
+     if (process.env.CI) return await writeFile("./dist/swagger.json", JSON.stringify(document));
+
      SwaggerModule.setup("swagger", app, document);
 
      await app.register(helmet);

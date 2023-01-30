@@ -1,0 +1,40 @@
+# .github/actions/build-sdk.yml
+
+name: Build SDK Library
+on: [push]
+jobs:
+  build:
+    name: ⚡ Build Client SDK Library
+    runs-on: ubuntu-latest
+    container: node:16
+
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: 🧶 Install Yarn
+        run: npm install yarn --location=global
+      
+      - name: 📦 Install dependencies
+        run: yarn install
+      
+      - name: 🔼 Generate Prisma Client
+        run: yarn prisma generate
+
+      - name: 🦁 Build NestJS Framework
+        run: yarn nest build
+
+      - name: 🧬 Generate Client SDK
+        run: yarn ci
+
+      - name: 📤 Publish Client SDK
+        uses: EndBug/add-and-commit@v4
+        with:
+          add: "generated"
+          force: true
+          message: '📦 ClientSDK Build @ $env:GITHUB_SHA'
+          author_email: 41898282+github-actions[bot]@users.noreply.github.com
+          author_name: github-actions[bot]
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
+      
