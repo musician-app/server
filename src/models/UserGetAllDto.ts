@@ -4,11 +4,11 @@
 
 import type { UserGetDto } from './UserGetDto';
 
-export type UserFindAllDto = {
+export type UserGetAllDto = {
     users: Array<UserGetDto>;
     /**
      * ID of the last user
      */
-    cursor: string;
+    cursor: any;
 };
 

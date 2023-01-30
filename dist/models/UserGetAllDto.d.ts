@@ -1,5 +1,5 @@
 import type { UserGetDto } from './UserGetDto';
-export type UserFindAllDto = {
+export type UserGetAllDto = {
     users: Array<UserGetDto>;
-    cursor: string;
+    cursor: any;
 };

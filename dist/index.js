@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserService = exports.OpenAPI = exports.CancelError = exports.CancelablePromise = exports.BaseHttpRequest = exports.ApiError = exports.ApiClient = void 0;
+exports.UserService = exports.PostService = exports.AuthService = exports.OpenAPI = exports.CancelError = exports.CancelablePromise = exports.BaseHttpRequest = exports.ApiError = exports.ApiClient = void 0;
 var ApiClient_1 = require("./ApiClient");
 Object.defineProperty(exports, "ApiClient", { enumerable: true, get: function () { return ApiClient_1.ApiClient; } });
 var ApiError_1 = require("./core/ApiError");
@@ -12,6 +12,10 @@ Object.defineProperty(exports, "CancelablePromise", { enumerable: true, get: fun
 Object.defineProperty(exports, "CancelError", { enumerable: true, get: function () { return CancelablePromise_1.CancelError; } });
 var OpenAPI_1 = require("./core/OpenAPI");
 Object.defineProperty(exports, "OpenAPI", { enumerable: true, get: function () { return OpenAPI_1.OpenAPI; } });
+var AuthService_1 = require("./services/AuthService");
+Object.defineProperty(exports, "AuthService", { enumerable: true, get: function () { return AuthService_1.AuthService; } });
+var PostService_1 = require("./services/PostService");
+Object.defineProperty(exports, "PostService", { enumerable: true, get: function () { return PostService_1.PostService; } });
 var UserService_1 = require("./services/UserService");
 Object.defineProperty(exports, "UserService", { enumerable: true, get: function () { return UserService_1.UserService; } });
 //# sourceMappingURL=index.js.map

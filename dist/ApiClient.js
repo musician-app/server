@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ApiClient = void 0;
 const FetchHttpRequest_1 = require("./core/FetchHttpRequest");
+const AuthService_1 = require("./services/AuthService");
+const PostService_1 = require("./services/PostService");
 const UserService_1 = require("./services/UserService");
 class ApiClient {
     constructor(config, HttpRequest = FetchHttpRequest_1.FetchHttpRequest) {
@@ -17,6 +19,8 @@ class ApiClient {
             HEADERS: config === null || config === void 0 ? void 0 : config.HEADERS,
             ENCODE_PATH: config === null || config === void 0 ? void 0 : config.ENCODE_PATH,
         });
+        this.auth = new AuthService_1.AuthService(this.request);
+        this.post = new PostService_1.PostService(this.request);
         this.user = new UserService_1.UserService(this.request);
     }
 }
