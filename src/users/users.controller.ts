@@ -1,10 +1,13 @@
-import { Controller, Get, HttpException, HttpStatus, Param, ParseUUIDPipe, Query, UseGuards } from "@nestjs/common";
-import { UsersService } from "./users.service";
-import { ApiBadGatewayResponse, ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { Controller, Get, HttpException, HttpStatus, Param, ParseUUIDPipe, Query } from "@nestjs/common";
+import { ApiBadGatewayResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { UserGetDto } from "./dto/user-get.dto";
-import { UserFindAllDto } from "./dto/user-findAll.dto";
-import { OptionalParameterPipe } from "src/pipes/OptionalParameterPipe";
-import { ApiAuthRequires as ApiRequiresAuth } from "src/decorators/apiAuthRequires";
+import { UserGetAllDto } from "./dto/user-get-all.dto";
+import { OptionalParameterPipe } from "src/pipes/optional-parameter.pipe";
+import { ApiRequiresAuth as ApiRequiresAuth } from "src/decorators/api-requires-auth";
+import { AuthenticatedUser } from "src/decorators/user.decorator";
+import { User } from "@prisma/client";
+import { PrismaService } from "src/prisma/prisma.service";
+import { PrismaUserGetDtoSelect } from "./users.constants";
 
 @Controller({
      path: "users"
@@ -12,62 +15,49 @@ import { ApiAuthRequires as ApiRequiresAuth } from "src/decorators/apiAuthRequir
 @ApiTags("user")
 @ApiRequiresAuth()
 export class UsersController {
-     constructor(private readonly userService: UsersService) {}
+     constructor(private readonly prismaService: PrismaService) {}
 
      //TODO: Proper recommendation API
-     @Get("findAll")
+     @Get("get-all")
      @ApiOperation({ description: "Returns a list of users (15 per request)", summary: "List all users in the app" })
      @ApiQuery({
           name: "cursor",
           description: "The ID of the last user received.",
           required: false
      })
-     @ApiOkResponse({ description: "Successful operation", type: UserFindAllDto })
+     @ApiOkResponse({ description: "Successful operation", type: UserGetAllDto })
      @ApiBadGatewayResponse({ description: "Validation failed (uuid is expected)" })
-     async findAll(@Query("cursor", new OptionalParameterPipe(ParseUUIDPipe)) cursor?: string): Promise<UserFindAllDto> {
-          const users = await this.userService.users({
+     async getAll(@Query("cursor", new OptionalParameterPipe(ParseUUIDPipe)) cursor?: string): Promise<UserGetAllDto> {
+          const users = await this.prismaService.user.findMany({
                cursor: cursor ? {
                     id: cursor
                } : void(0),
                take: 15,
-               select: {
-                    id: true,
-                    username: true,
-                    avatar: true,
-                    firstName: true,
-                    lastName: true,
-                    _count: {
-                         select: {
-                              followers: true,
-                              following: true
-                         }
-                    }
-               }
+               select: PrismaUserGetDtoSelect
           });
 
           return {
                users: users.map(user => ({ ...user, ...user._count, _count: void(0) })),
                cursor: users.length ? users[users.length - 1].id : null
-          } as UserFindAllDto;
+          } as UserGetAllDto;
+     }
+
+     @Get("@me")
+     @ApiOperation({ description: "Returns the current user", summary: "Get authenticated user" })
+     @ApiOkResponse({ description: "Successful operation", type: UserGetDto })
+     @ApiNotFoundResponse({ description: "User not found" })
+     async me(@AuthenticatedUser() user: User): Promise<UserGetDto> {
+          return this.byUUID(user.id);
      }
 
      @Get(":id")
      @ApiOperation({ description: "Returns a single user", summary: "Find user by UUID" })
      @ApiOkResponse({ description: "Successful operation", type: UserGetDto })
      @ApiNotFoundResponse({ description: "User not found" })
-     async find(@Param("id", ParseUUIDPipe) id: string): Promise<UserGetDto> {
-          const user = await this.userService.user({ id }, {
-               id: true,
-               username: true,
-               avatar: true,
-               firstName: true,
-               lastName: true,
-               _count: {
-                    select: {
-                         followers: true,
-                         following: true
-                    }
-               }
+     async byUUID(@Param("id", ParseUUIDPipe) id: string): Promise<UserGetDto> {
+          const user = await this.prismaService.user.findUnique({ 
+               where: { id },
+               select: PrismaUserGetDtoSelect
           });
 
           if (!user) throw new HttpException("User not found", HttpStatus.NOT_FOUND);

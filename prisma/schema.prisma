@@ -65,9 +65,10 @@ model Post {
 
   source String
   likes  LikesOnPost[]
+  comments   Comment[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model LikesOnComment {
@@ -86,11 +87,14 @@ model Comment {
   content String
   likes   LikesOnComment[]
 
+  post   Post   @relation(fields: [postId], references: [id])
+  postId String
+
   author   User   @relation(fields: [authorId], references: [id])
   authorId String
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime? @updatedAt
 }
 
 enum AuthorizationTokenState {

@@ -8,11 +8,14 @@ import { config } from "dotenv";
 import { NestFastifyApplication } from "@nestjs/platform-fastify";
 import { FastifyAdapter } from "@nestjs/platform-fastify/adapters";
 import { writeFile } from "fs/promises";
+import { ValidationPipe } from "@nestjs/common";
 
 config();
 
 async function bootstrap() {
      const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
+
+     app.useGlobalPipes(new ValidationPipe());
 
      const documentConfig = new DocumentBuilder()
           .setTitle("Musician App API")
@@ -21,7 +24,11 @@ async function bootstrap() {
           .addBearerAuth({ type: "http", name: "JWT Token", in: "header", bearerFormat: "JWT", scheme: "bearer" }, "defaultJWT")
           .build();
 
-     const document = SwaggerModule.createDocument(app, documentConfig);
+     const document = SwaggerModule.createDocument(app, documentConfig, {
+          operationIdFactory(controllerKey, methodKey) {
+               return methodKey;
+          },
+     });
 
      if (process.env.CI) return await writeFile("./dist/swagger.json", JSON.stringify(document));
 
@@ -33,7 +40,7 @@ async function bootstrap() {
 
      app.enableCors();
 
-     await app.listen(process.env.PORT);
+     await app.listen(process.env.PORT as string);
 
      if (process.env.NODE_ENV === "development") {
           console.log(`OpenAI SwaggerUI is ready: http://localhost:${process.env.PORT}/swagger`);

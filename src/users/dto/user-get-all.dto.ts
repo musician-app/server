@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { UserGetDto } from "./user-get.dto";
 
-export class UserFindAllDto {
+export class UserGetAllDto {
      @ApiProperty({ type: [UserGetDto] })
      users: UserGetDto[];
 
