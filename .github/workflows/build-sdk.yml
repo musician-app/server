@@ -1,4 +1,4 @@
-# .github/actions/build-sdk.yml
+# .github/workflows/build-sdk.yml
 
 name: Build SDK Library
 on: [push]
