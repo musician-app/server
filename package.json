@@ -19,7 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "ci": "yarn ci:swagger && yarn ci:generate",
-    "ci:generate": "openapi --input ./dist/swagger.json --output ./generated --name AppClient",
+    "ci:generate": "node ./scripts/buildSdk.js",
     "ci:swagger": "set CI=true && node dist/main.js"
   },
   "dependencies": {
@@ -67,7 +67,7 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "4.1.1",
-    "typescript": "^4.7.4"
+    "typescript": "^4.9.4"
   },
   "jest": {
     "moduleFileExtensions": [
