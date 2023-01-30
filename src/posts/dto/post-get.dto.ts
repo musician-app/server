@@ -17,9 +17,9 @@ export class PostGetDto {
      @ApiProperty()
      description: string;
 
-     @ApiProperty({ type: "ISO Timestamp" })
+     @ApiProperty({ description: "ISO Timestamp" })
      createdAt: string;
 
-     @ApiProperty({ type: "ISO Timestamp" })
+     @ApiProperty({ description: "ISO Timestamp" })
      updatedAt?: string;
 }
