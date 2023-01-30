@@ -44,4 +44,6 @@ const { execSync } = require("child_process");
           files: ["dist/*"],
           license: "UNLICENSED"
      }));
+
+     fs.copyFileSync("./assets/README.sdk.md", "./sdk/README.md");
 })();
