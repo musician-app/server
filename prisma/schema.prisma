@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Category {
+  Guitarist
+  Singer
+  Drummer
+  Bassist
+}
+
+model User {
+  id           String @id @default(uuid())
+  username     String @unique
+  firstName    String
+  lastName     String
+  email        String
+  passwordHash String
+  avatar       String
+
+  posts     Post[]
+  postLikes LikesOnPost[]
+
+  comments     Comment[]
+  commentLikes LikesOnComment[]
+
+  following UserFollow[] @relation("following")
+  followers UserFollow[] @relation("follower")
+
+  tokens    AuthorizationTokens[]
+  createdAt DateTime              @default(now())
+}
+
+model UserFollow {
+  id         Int    @id @default(autoincrement())
+  follower   User   @relation("follower", fields: [followerId], references: [id])
+  followerId String
+
+  following   User   @relation("following", fields: [followingId], references: [id])
+  followingId String
+
+  createdAt DateTime @default(now())
+}
+
+model LikesOnPost {
+  id     Int    @id @default(autoincrement())
+  post   Post   @relation(fields: [postId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+  postId String
+  userId String
+
+  createdAt DateTime @default(now())
+}
+
+model Post {
+  id          String @id @default(uuid())
+  author      User   @relation(fields: [authorId], references: [id])
+  authorId    String
+  description String
+
+  source String
+  likes  LikesOnPost[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LikesOnComment {
+  id        Int     @id @default(autoincrement())
+  comment   Comment @relation(fields: [commentId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
+  commentId String
+  userId    String
+
+  createdAt DateTime @default(now())
+}
+
+model Comment {
+  id String @id @default(uuid())
+
+  content String
+  likes   LikesOnComment[]
+
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum AuthorizationTokenState {
+  Active
+  Destroyed
+}
+
+model AuthorizationTokens {
+  id    Int                     @id @default(autoincrement())
+  state AuthorizationTokenState @default(Active)
+
+  token String @unique
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  createdAt DateTime @default(now())
+}
