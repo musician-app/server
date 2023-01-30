@@ -29,6 +29,14 @@ module.exports = {
                "avoidEscape": true,
                "allowTemplateLiterals": true
           }],
-          "semi": ["error"]
+          "semi": ["error"],
+          "@typescript-eslint/no-unused-vars": [
+               "warn",
+               {
+                    "argsIgnorePattern": "^_",
+                    "varsIgnorePattern": "^_",
+                    "caughtErrorsIgnorePattern": "^_"
+               }],
+          "@typescript-eslint/no-non-null-assertion": "off"
      },
 };
