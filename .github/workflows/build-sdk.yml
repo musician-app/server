@@ -1,7 +1,11 @@
 # .github/workflows/build-sdk.yml
 
 name: Build SDK Library
+
 on: [push]
+
+permissions: read-all|write-all
+
 jobs:
   build:
     name: ⚡ Build Client SDK Library
