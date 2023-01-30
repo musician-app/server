@@ -12,6 +12,10 @@ A [Nest](https://github.com/nestjs/nest) framework written in TypeScript.
 
 - 🐘 Set up a PostgreSQL database
 - 🔌 Copy `example.env` to `.env` and fill the environmental variables
+- 📂 Create a folder called `certs` at the root of the project:
+  - 🔐 Generate a RSASHA256 key (no passphrase) for the JWT signing:
+    - 🔒 Name the *private key* `jwtRS256.key`
+    - 🔑 Name the *public key* `jwtRS256.key`
 
 ```bash
 $ yarn install
