@@ -1,4 +1,4 @@
-import { PrismaUserGetDtoSelect } from "src/users/users.constants";
+import { PrismaUserGetDtoSelect } from "../users/users.constants";
 
 export const PrismaPostGetDtoInclude = {
      author: {

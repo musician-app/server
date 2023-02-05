@@ -1,10 +1,10 @@
 import { Controller, Get, HttpException, HttpStatus, Param, ParseUUIDPipe, Query } from "@nestjs/common";
 import { ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { PostGetDto } from "./dto/post-get.dto";
-import { PrismaService } from "src/prisma/prisma.service";
-import { ApiRequiresAuth } from "src/decorators/api-requires-auth";
+import { PrismaService } from "../prisma/prisma.service";
+import { ApiRequiresAuth } from "../decorators/api-requires-auth";
 import { PostGetAllDto } from "./dto/post-get-all.dto";
-import { OptionalParameterPipe } from "src/pipes/optional-parameter.pipe";
+import { OptionalParameterPipe } from "../pipes/optional-parameter.pipe";
 import { PrismaPostGetDtoInclude } from "./posts.constants";
 
 @Controller("posts")

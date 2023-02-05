@@ -3,7 +3,7 @@ import { ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnautho
 import { LoginRequestDto } from "./dto/login-request.dto";
 import { AuthService } from "./auth.service";
 import { RegisterRequestDto } from "./dto/register.dto";
-import { PrismaService } from "src/prisma/prisma.service";
+import { PrismaService } from "../prisma/prisma.service";
 import { hash } from "bcrypt";
 import { ValidationPipe } from "@nestjs/common/pipes/validation.pipe";
 import { LoginResponseDto } from "./dto/login-response.dto";

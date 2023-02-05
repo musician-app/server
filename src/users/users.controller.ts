@@ -2,11 +2,11 @@ import { Controller, Get, HttpException, HttpStatus, Param, ParseUUIDPipe, Query
 import { ApiBadGatewayResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { UserGetDto } from "./dto/user-get.dto";
 import { UserGetAllDto } from "./dto/user-get-all.dto";
-import { OptionalParameterPipe } from "src/pipes/optional-parameter.pipe";
-import { ApiRequiresAuth as ApiRequiresAuth } from "src/decorators/api-requires-auth";
-import { AuthenticatedUser } from "src/decorators/user.decorator";
+import { OptionalParameterPipe } from "../pipes/optional-parameter.pipe";
+import { ApiRequiresAuth } from "../decorators/api-requires-auth";
+import { AuthenticatedUser } from "../decorators/user.decorator";
 import { User } from "@prisma/client";
-import { PrismaService } from "src/prisma/prisma.service";
+import { PrismaService } from "../prisma/prisma.service";
 import { PrismaUserGetDtoSelect } from "./users.constants";
 
 @Controller({
