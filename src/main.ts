@@ -15,8 +15,6 @@ config();
 async function bootstrap() {
      const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
 
-     app.useGlobalPipes(new ValidationPipe());
-
      const documentConfig = new DocumentBuilder()
           .setTitle("Musician App API")
           .setDescription("The Musician App API")
