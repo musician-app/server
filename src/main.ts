@@ -8,7 +8,6 @@ import { config } from "dotenv";
 import { NestFastifyApplication } from "@nestjs/platform-fastify";
 import { FastifyAdapter } from "@nestjs/platform-fastify/adapters";
 import { writeFile } from "fs/promises";
-import { ValidationPipe } from "@nestjs/common";
 
 config();
 

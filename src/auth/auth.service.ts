@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import bcrypt from "bcrypt";
+import * as bcrypt from "bcrypt";
 import { PrismaService } from "../prisma/prisma.service";
 import { jwtConstants } from "./auth.contants";
 import { AuthorizationTokenState, User } from "@prisma/client";
@@ -26,9 +26,9 @@ export class AuthService {
           
           if (!user) return [null, null];
 
-          if (await bcrypt.compare(password, user.passwordHash)) return [null, null];
+          if (await bcrypt.compare(password, user.passwordHash)) return [user, user.tokens.map(x => x.token)[0] || await this.grantToken(user.id)];
 
-          return [user, user.tokens.map(x => x.token)[0] || await this.grantToken(user.id)];
+          return [null, null];
      }
 
      async validateToken(token: string): Promise<User | void> {
