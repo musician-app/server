@@ -1,11 +1,10 @@
 /* eslint-disable */
 const generator = require("openapi-typescript-codegen");
-const fetch = require("node-fetch")
-const fs = require("fs");
+const fs = require("fs-extra");
 const { execSync } = require("child_process");
 
 (async () => {
-     fs.mkdirSync("./sdk")
+     fs.moveSync("./sdk-assets", "./sdk")
 
      await generator.generate({
           input: "./dist/swagger.json",
@@ -40,12 +39,14 @@ const { execSync } = require("child_process");
      });
 
      fs.writeFileSync("./sdk/package.json", JSON.stringify({
-          name: "musician-app-sdk",
+          name: "@musician-app/sdk",
           main: "./dist/index.js",
           files: ["dist/*"],
           license: "UNLICENSED",
-          version: require("../package.json").version
+          version: require("../package.json").version,
+          repository: "github:musician-app/sdk",
+          publishConfig: {
+               registry: "https://npm.pkg.github.com"
+          }
      }));
-
-     fs.copyFileSync("./assets/README.sdk.md", "./sdk/README.md");
 })();
