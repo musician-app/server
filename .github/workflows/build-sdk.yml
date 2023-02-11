@@ -2,11 +2,15 @@
 
 name: Build SDK Library
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
     name: ⚡ Build Client SDK Library
+    if: github.repository == 'musician-app/server'
     runs-on: ubuntu-latest
     container: node:16
 
@@ -32,5 +36,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.REPO_SECRET  }}
           MESSAGE: "📦 ClientSDK Build @ {sha}"
           FOLDER: sdk
-          BRANCH: sdk
-          REPO: self
+          BRANCH: main
+          REPO: git@github.com:musician-app/sdk.git
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}

@@ -1,0 +1,27 @@
+# .github/workflows/publish.yml
+
+name: Publish SDK on GitHub NPM
+
+on: [push]
+
+jobs:
+  publish:
+    name: 📤 Publish SDK on GitHub NPM
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v2
+
+      - name: 🔰 Use Node v16.x
+        uses: actions/setup-node@v1
+          node-version: 16.x
+          registry-url: https://npm.pkg.github.com/
+          scope: "@musician-app"
+
+      - name: 📦 Create .npmrc
+        run: echo "registry=https://npm.pkg.github.com/@musician-app" >> .npmrc
+
+      - name: ☁️ Publish to registry
+        run: npm publish $(ls *.tgz)
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
